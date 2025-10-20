@@ -1,13 +1,11 @@
 package nats_service
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/micro"
-	"time"
 )
 
 // check that Service satisfies ServiceInterface
@@ -16,18 +14,6 @@ import (
 type Service struct {
 	config   ServiceConfig
 	microSvc micro.Service
-}
-
-type ServiceConfig struct {
-	Ctx                context.Context // TOCO : handle or remove
-	Nc                 *nats.Conn
-	Name               string `json:"name"`
-	prefix             string
-	Version            string            `json:"version"`
-	Description        string            `json:"description"`
-	Metadata           map[string]string `json:"metadata,omitempty"`
-	QueueGroup         string            `json:"queue_group"`
-	QueueGroupDisabled bool              `json:"queue_group_disabled"`
 }
 
 func (sc *ServiceConfig) Validate() error {
@@ -51,11 +37,9 @@ func NewService(serviceConfig ServiceConfig) (*Service, error) {
 	}
 	// build micro.AddService configuration
 	microConfig := micro.Config{
-		Name:               serviceConfig.Name,
-		Version:            serviceConfig.Version,
-		Metadata:           serviceConfig.Metadata,
-		QueueGroup:         serviceConfig.QueueGroup,
-		QueueGroupDisabled: serviceConfig.QueueGroupDisabled,
+		Name:     serviceConfig.Name,
+		Version:  serviceConfig.Version,
+		Metadata: serviceConfig.Metadata,
 	}
 	service.microSvc, err = micro.AddService(service.config.Nc, microConfig)
 	return service, err
@@ -70,17 +54,7 @@ func (s *Service) Config() ServiceConfig {
 	return s.config
 }
 
-type EndpointHandler = func(req any, msg *nats.Msg, service *Service) (any, error)
-
-type EndpointConfig struct {
-	Name           string            `json:"name"`
-	Handler        EndpointHandler   `json:"-"` // Non-serializable
-	RequestTimeout time.Duration     `json:"request_timeout"`
-	Metadata       map[string]string `json:"metadata,omitempty"`
-	QueueGroup     string            `json:"queue_group,omitempty"`
-	Subject        string            `json:"subject,omitempty"`
-	Service        *Service
-}
+type EndpointHandler = func(req any, msg *nats.Msg, service Service) (any, error)
 
 func (ec *EndpointConfig) Validate() error {
 	if ec.Name == "" {

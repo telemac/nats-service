@@ -39,7 +39,6 @@ func TestNewService(t *testing.T) {
 				Nc:          ts.Conn,
 				Name:        "queue-service",
 				Version:     "1.0.0",
-				QueueGroup:  "test-queue",
 				Description: "Test service with queue group",
 			},
 			expectError: false,
@@ -48,12 +47,10 @@ func TestNewService(t *testing.T) {
 		{
 			name: "service with disabled queue group",
 			config: ServiceConfig{
-				Nc:                 ts.Conn,
-				Name:               "no-queue-service",
-				Version:            "1.0.0",
-				QueueGroup:         "test-queue",
-				QueueGroupDisabled: true,
-				Description:        "Test service with disabled queue group",
+				Nc:          ts.Conn,
+				Name:        "no-queue-service",
+				Version:     "1.0.0",
+				Description: "Test service with disabled queue group",
 			},
 			expectError: false,
 			description: "Should create service with disabled queue group",
@@ -83,8 +80,6 @@ func TestNewService(t *testing.T) {
 				assert.Equal(tt.config.Name, service.config.Name)
 				assert.Equal(tt.config.Version, service.config.Version)
 				assert.Equal(tt.config.Description, service.config.Description)
-				assert.Equal(tt.config.QueueGroup, service.config.QueueGroup)
-				assert.Equal(tt.config.QueueGroupDisabled, service.config.QueueGroupDisabled)
 				assert.Equal(tt.config.Metadata, service.config.Metadata)
 				assert.NotNil(service.microSvc, "Micro service should be initialized")
 			}
@@ -144,15 +139,12 @@ func TestService_Integration_NewServiceAndStop(t *testing.T) {
 			Name:        "service-2",
 			Version:     "2.0.0",
 			Description: "Second test service",
-			QueueGroup:  "test-queue",
 		},
 		{
-			Nc:                 ts.Conn,
-			Name:               "service-3",
-			Version:            "3.0.0",
-			Description:        "Third test service",
-			QueueGroup:         "another-queue",
-			QueueGroupDisabled: true,
+			Nc:          ts.Conn,
+			Name:        "service-3",
+			Version:     "3.0.0",
+			Description: "Third test service",
 		},
 	}
 

@@ -1,0 +1,83 @@
+package nats_service
+
+import (
+	"fmt"
+	"github.com/nats-io/nats.go/micro"
+	"sync"
+)
+
+var _ Servicer = (*NatsService)(nil)
+
+type NatsService struct {
+	config   ServiceConfig
+	mu       sync.RWMutex
+	microSvc micro.Service
+}
+
+func StartNatsService(config ServiceConfig) (*NatsService, error) {
+	svc := &NatsService{config: config}
+	err := svc.start()
+	return svc, err
+}
+
+func (svc *NatsService) start() error {
+	err := svc.config.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid service config: %w", err)
+	}
+	// build micro.AddService configuration
+	microConfig := micro.Config{
+		Name:        svc.config.Name,
+		Version:     svc.config.Version,
+		Description: svc.config.Description,
+		Metadata:    svc.config.Metadata,
+	}
+	svc.microSvc, err = micro.AddService(svc.config.Nc, microConfig)
+	if err != nil {
+		return err
+	}
+	if svc.config.Prefix != "" {
+		svc.microSvc.AddGroup(svc.config.Prefix)
+	}
+	return err
+}
+
+func (svc *NatsService) Stop() error {
+	return svc.microSvc.Stop()
+}
+
+func (svc *NatsService) GetConfig() ServiceConfig {
+	return svc.config
+}
+
+func (svc *NatsService) AddEndpoint(config EndpointConfig) error {
+	err := svc.config.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid endpoint config: %w", err)
+	}
+	config.Service = svc
+	config.Endpoint.SetConfig(config)
+
+	var opts []micro.EndpointOpt
+
+	// Subject (obligatoire dans la plupart des cas)
+	if config.Subject != "" {
+		opts = append(opts, micro.WithEndpointSubject(config.Subject))
+	} else {
+		opts = append(opts, micro.WithEndpointSubject(svc.config.Name+"."+config.Name))
+	}
+
+	// Métadonnées
+	if len(config.Metadata) > 0 {
+		opts = append(opts, micro.WithEndpointMetadata(config.Metadata))
+	}
+
+	// Groupe de queue (activé ou désactivé)
+	if config.QueueGroup != "" {
+		opts = append(opts, micro.WithEndpointQueueGroup(config.QueueGroup))
+	} else {
+		opts = append(opts, micro.WithEndpointQueueGroupDisabled())
+	}
+
+	return svc.microSvc.AddEndpoint(config.Name, config.Endpoint, opts...)
+}
