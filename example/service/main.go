@@ -45,12 +45,11 @@ func main() {
 	var addEndpoint = &endpoints.Add{}
 
 	err = service.AddEndpoint(nats_service.EndpointConfig{
-		Name:           "add",
-		Endpoint:       addEndpoint,
-		RequestTimeout: 0,
-		Metadata:       nil,
-		QueueGroup:     "",
-		Subject:        "",
+		//Name:           "add",
+		Endpoint:   addEndpoint,
+		Metadata:   map[string]string{"prefix": "a.b.c"},
+		QueueGroup: "",
+		Subject:    "",
 	})
 	if err != nil {
 		slog.Error("Failed to add endpoint", "error", err)

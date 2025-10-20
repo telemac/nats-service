@@ -52,6 +52,9 @@ func (svc *NatsService) GetServiceConfig() ServiceConfig {
 }
 
 func (svc *NatsService) AddEndpoint(config EndpointConfig) error {
+	if config.Name == "" {
+		config.Name = config.Endpoint.Name()
+	}
 	err := svc.config.Validate()
 	if err != nil {
 		return fmt.Errorf("invalid endpoint config: %w", err)
@@ -65,7 +68,11 @@ func (svc *NatsService) AddEndpoint(config EndpointConfig) error {
 	if config.Subject != "" {
 		opts = append(opts, micro.WithEndpointSubject(config.Subject))
 	} else {
-		opts = append(opts, micro.WithEndpointSubject(svc.config.Name+"."+config.Name))
+		if svc.config.Prefix != "" {
+			opts = append(opts, micro.WithEndpointSubject(svc.config.Prefix+"."+svc.config.Name+"."+config.Name))
+		} else {
+			opts = append(opts, micro.WithEndpointSubject(svc.config.Name+"."+config.Name))
+		}
 	}
 
 	// Métadonnées

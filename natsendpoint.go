@@ -23,3 +23,7 @@ func (e *NatsEndpoint) Service() Servicer {
 func (e *NatsEndpoint) Handle(micro.Request) {
 	panic("implement me")
 }
+
+func (e *NatsEndpoint) Name() string {
+	return ""
+}

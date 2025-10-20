@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/nats-io/nats.go"
 	"log/slog"
-	"time"
 )
 
 type ServiceConfig struct {
@@ -36,13 +35,13 @@ func (sc *ServiceConfig) Validate() error {
 }
 
 type EndpointConfig struct {
-	Service        Servicer
-	Name           string            `json:"name"`
-	Endpoint       Endpointer        `json:"-"` // Non-serializable
-	RequestTimeout time.Duration     `json:"request_timeout"`
-	Metadata       map[string]string `json:"metadata,omitempty"`
-	QueueGroup     string            `json:"queue_group,omitempty"`
-	Subject        string            `json:"subject,omitempty"`
+	Service  Servicer
+	Name     string     `json:"name"`
+	Endpoint Endpointer `json:"-"` // Non-serializable
+	//RequestTimeout time.Duration     `json:"request_timeout"`
+	Metadata   map[string]string `json:"metadata,omitempty"`
+	QueueGroup string            `json:"queue_group,omitempty"`
+	Subject    string            `json:"subject,omitempty"`
 }
 
 func (ec *EndpointConfig) Validate() error {
