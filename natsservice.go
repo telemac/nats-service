@@ -76,8 +76,20 @@ func (svc *NatsService) AddEndpoint(config EndpointConfig) error {
 	}
 
 	// Métadonnées
-	if len(config.Metadata) > 0 {
+	if len(config.Metadata) > 0 && len(config.Endpoint.Metadata()) == 0 {
 		opts = append(opts, micro.WithEndpointMetadata(config.Metadata))
+	} else if len(config.Metadata) == 0 && len(config.Endpoint.Metadata()) > 0 {
+		opts = append(opts, micro.WithEndpointMetadata(config.Metadata))
+	} else {
+		// merge metas
+		metas := make(map[string]string)
+		for k, v := range config.Endpoint.Metadata() {
+			metas[k] = v
+		}
+		for k, v := range config.Metadata {
+			metas[k] = v
+		}
+		opts = append(opts, micro.WithEndpointMetadata(metas))
 	}
 
 	// Groupe de queue (activé ou désactivé)

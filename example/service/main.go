@@ -30,7 +30,7 @@ func main() {
 		Name:        "math",
 		Version:     "0.0.1",
 		Description: "make additions and substractions",
-		Prefix:      "a.b.c",
+		//Prefix:      "a.b.c",
 		Metadata: map[string]string{
 			"authro": "Alexandre HEIM",
 		},
@@ -45,11 +45,7 @@ func main() {
 	var addEndpoint = &endpoints.Add{}
 
 	err = service.AddEndpoint(nats_service.EndpointConfig{
-		//Name:           "add",
-		Endpoint:   addEndpoint,
-		Metadata:   map[string]string{"prefix": "a.b.c"},
-		QueueGroup: "",
-		Subject:    "",
+		Endpoint: addEndpoint,
 	})
 	if err != nil {
 		slog.Error("Failed to add endpoint", "error", err)

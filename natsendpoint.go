@@ -27,3 +27,7 @@ func (e *NatsEndpoint) Handle(micro.Request) {
 func (e *NatsEndpoint) Name() string {
 	return ""
 }
+
+func (e *NatsEndpoint) Metadata() map[string]string {
+	return nil
+}

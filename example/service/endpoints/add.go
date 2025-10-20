@@ -29,6 +29,12 @@ func (e *Add) Name() string {
 	return "add"
 }
 
+func (e *Add) Metadata() map[string]string {
+	return map[string]string{
+		"version": "1.0.0",
+	}
+}
+
 func (e *Add) Handle(req micro.Request) {
 	log := e.Service().Logger()
 

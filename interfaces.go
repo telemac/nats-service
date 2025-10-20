@@ -15,6 +15,7 @@ type Servicer interface {
 type Endpointer interface {
 	micro.Handler
 	Name() string
+	Metadata() map[string]string
 	Service() Servicer
 	GetEndpointConfig() EndpointConfig
 	SetEndpointConfig(config EndpointConfig)
