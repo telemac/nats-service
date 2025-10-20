@@ -3,6 +3,7 @@ package nats_service
 import (
 	"fmt"
 	"github.com/nats-io/nats.go/micro"
+	"log/slog"
 	"sync"
 )
 
@@ -46,7 +47,7 @@ func (svc *NatsService) Stop() error {
 	return svc.microSvc.Stop()
 }
 
-func (svc *NatsService) GetConfig() ServiceConfig {
+func (svc *NatsService) GetServiceConfig() ServiceConfig {
 	return svc.config
 }
 
@@ -56,7 +57,7 @@ func (svc *NatsService) AddEndpoint(config EndpointConfig) error {
 		return fmt.Errorf("invalid endpoint config: %w", err)
 	}
 	config.Service = svc
-	config.Endpoint.SetConfig(config)
+	config.Endpoint.SetEndpointConfig(config)
 
 	var opts []micro.EndpointOpt
 
@@ -80,4 +81,8 @@ func (svc *NatsService) AddEndpoint(config EndpointConfig) error {
 	}
 
 	return svc.microSvc.AddEndpoint(config.Name, config.Endpoint, opts...)
+}
+
+func (svc *NatsService) Logger() *slog.Logger {
+	return svc.config.Logger
 }

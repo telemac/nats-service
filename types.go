@@ -4,12 +4,14 @@ import (
 	"context"
 	"errors"
 	"github.com/nats-io/nats.go"
+	"log/slog"
 	"time"
 )
 
 type ServiceConfig struct {
 	Ctx         context.Context // TOCO : handle or remove
 	Nc          *nats.Conn
+	Logger      *slog.Logger
 	Name        string `json:"name"`
 	Prefix      string
 	Version     string            `json:"version"`
@@ -18,8 +20,14 @@ type ServiceConfig struct {
 }
 
 func (sc *ServiceConfig) Validate() error {
+	if sc.Ctx == nil {
+		return errors.New("missing context")
+	}
 	if sc.Nc == nil {
 		return errors.New("nats connection required")
+	}
+	if sc.Logger == nil {
+		return errors.New("logger required")
 	}
 	if sc.Name == "" {
 		return errors.New("service name required")
@@ -35,4 +43,18 @@ type EndpointConfig struct {
 	Metadata       map[string]string `json:"metadata,omitempty"`
 	QueueGroup     string            `json:"queue_group,omitempty"`
 	Subject        string            `json:"subject,omitempty"`
+}
+
+func (ec *EndpointConfig) Validate() error {
+	if ec.Service == nil {
+		return errors.New("service required")
+	}
+	if ec.Name == "" {
+		return errors.New("service name required")
+	}
+	if ec.Endpoint == nil {
+		return errors.New("endpoint required")
+	}
+
+	return nil
 }

@@ -2,21 +2,12 @@ package main
 
 import (
 	"github.com/nats-io/nats.go"
-	"github.com/nats-io/nats.go/micro"
 	"github.com/telemac/goutils/task"
 	"github.com/telemac/nats_service"
+	"github.com/telemac/nats_service/example/service/endpoints"
 	"log/slog"
 	"time"
 )
-
-type Add struct {
-	nats_service.NatsEndpoint
-	Count int
-}
-
-func (e *Add) Handle(micro.Request) {
-	e.Count++
-}
 
 func main() {
 	ctx, cancel := task.NewCancellableContext(time.Second * 5)
@@ -35,6 +26,7 @@ func main() {
 	service, err := nats_service.StartNatsService(nats_service.ServiceConfig{
 		Ctx:         ctx,
 		Nc:          nc,
+		Logger:      log,
 		Name:        "math",
 		Version:     "0.0.1",
 		Description: "make additions and substractions",
@@ -48,12 +40,11 @@ func main() {
 		return
 	}
 
-	service.GetConfig().Metadata["prefix"] = "a.b.c" // how to modify service metadatas
+	service.GetServiceConfig().Metadata["prefix"] = "a.b.c" // how to modify service metadatas
 
-	var addEndpoint = &Add{}
+	var addEndpoint = &endpoints.Add{}
 
 	err = service.AddEndpoint(nats_service.EndpointConfig{
-		Service:        nil,
 		Name:           "add",
 		Endpoint:       addEndpoint,
 		RequestTimeout: 0,

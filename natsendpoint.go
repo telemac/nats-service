@@ -8,12 +8,16 @@ type NatsEndpoint struct {
 	config EndpointConfig
 }
 
-func (e *NatsEndpoint) GetConfig() EndpointConfig {
+func (e *NatsEndpoint) GetEndpointConfig() EndpointConfig {
 	return e.config
 }
 
-func (e *NatsEndpoint) SetConfig(config EndpointConfig) {
+func (e *NatsEndpoint) SetEndpointConfig(config EndpointConfig) {
 	e.config = config
+}
+
+func (e *NatsEndpoint) Service() Servicer {
+	return e.config.Service
 }
 
 func (e *NatsEndpoint) Handle(micro.Request) {
