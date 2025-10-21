@@ -39,6 +39,13 @@ func main() {
 		slog.Error("Failed to run NATS service", "error", err)
 		return
 	}
+	defer func() {
+		log.Info("shutting down NATS service")
+		err = service.Stop()
+		if err != nil {
+			slog.Error("Failed to stop NATS service", "error", err)
+		}
+	}()
 
 	service.GetServiceConfig().Metadata["prefix"] = "a.b.c" // how to modify service metadatas
 
@@ -53,11 +60,5 @@ func main() {
 	}
 
 	<-ctx.Done()
-
-	log.Info("shutting down NATS service")
-	err = service.Stop()
-	if err != nil {
-		slog.Error("Failed to stop NATS service", "error", err)
-	}
 
 }
