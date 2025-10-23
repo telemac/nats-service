@@ -5,14 +5,14 @@ import "github.com/nats-io/nats.go/micro"
 var _ Endpointer = (*Endpoint)(nil)
 
 type Endpoint struct {
-	config EndpointConfig
+	config *EndpointConfig
 }
 
-func (e *Endpoint) GetEndpointConfig() EndpointConfig {
+func (e *Endpoint) GetEndpointConfig() *EndpointConfig {
 	return e.config
 }
 
-func (e *Endpoint) SetEndpointConfig(config EndpointConfig) {
+func (e *Endpoint) SetEndpointConfig(config *EndpointConfig) {
 	e.config = config
 }
 

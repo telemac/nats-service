@@ -48,11 +48,14 @@ func (svc *Service) Stop() error {
 	return svc.microSvc.Stop()
 }
 
-func (svc *Service) GetServiceConfig() ServiceConfig {
-	return *svc.config
+func (svc *Service) GetServiceConfig() *ServiceConfig {
+	return svc.config
 }
 
-func (svc *Service) AddEndpoint(config EndpointConfig) error {
+func (svc *Service) AddEndpoint(config *EndpointConfig) error {
+	if config == nil {
+		return fmt.Errorf("invalid endpoint config")
+	}
 	if config.Name == "" {
 		config.Name = config.Endpoint.Name()
 	}

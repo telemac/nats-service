@@ -4,8 +4,8 @@ import (
 	"github.com/nats-io/nats.go"
 	"github.com/telemac/goutils/task"
 	"github.com/telemac/nats_service"
-	"github.com/telemac/nats_service/example/basic-service/basicservice"
-	"github.com/telemac/nats_service/example/basic-service/endpoints"
+	"github.com/telemac/nats_service/examples/basic"
+	"github.com/telemac/nats_service/examples/basic/endpoints"
 	"log/slog"
 	"time"
 )
@@ -24,7 +24,7 @@ func main() {
 	defer nc.Close()
 
 	log.Info("starting nats service")
-	var basicService basicservice.BasicService
+	var basicService basic.BasicService
 	err = basicService.Start(&nats_service.ServiceConfig{
 		Ctx:         ctx,
 		Nc:          nc,
@@ -34,21 +34,9 @@ func main() {
 		Description: "service example",
 		//Prefix:      "a.b.c",
 		Metadata: map[string]string{
-			"authro": "Alexandre HEIM",
+			"author": "Alexandre HEIM",
 		},
 	})
-	//basicService, err := nats_service.StartService(&nats_service.ServiceConfig{
-	//	Ctx:         ctx,
-	//	Nc:          nc,
-	//	Logger:      log,
-	//	Name:        "basic-service",
-	//	Version:     "0.0.1",
-	//	Description: "service example",
-	//	//Prefix:      "a.b.c",
-	//	Metadata: map[string]string{
-	//		"authro": "Alexandre HEIM",
-	//	},
-	//})
 	if err != nil {
 		slog.Error("Failed to run NATS service", "error", err)
 		return
@@ -69,7 +57,7 @@ func main() {
 	}
 
 	for _, endpoint := range endpoints {
-		err = basicService.AddEndpoint(nats_service.EndpointConfig{
+		err = basicService.AddEndpoint(&nats_service.EndpointConfig{
 			Endpoint: endpoint,
 		})
 		if err != nil {

@@ -1,4 +1,4 @@
-package basicservice
+package basic
 
 import (
 	"github.com/telemac/nats_service"

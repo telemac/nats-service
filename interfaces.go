@@ -8,8 +8,8 @@ import (
 type Servicer interface {
 	Start(*ServiceConfig) error
 	Stop() error
-	GetServiceConfig() ServiceConfig
-	AddEndpoint(config EndpointConfig) error
+	GetServiceConfig() *ServiceConfig
+	AddEndpoint(config *EndpointConfig) error
 	Logger() *slog.Logger
 }
 
@@ -18,6 +18,6 @@ type Endpointer interface {
 	Name() string
 	Metadata() map[string]string
 	Service() Servicer
-	GetEndpointConfig() EndpointConfig
-	SetEndpointConfig(config EndpointConfig)
+	GetEndpointConfig() *EndpointConfig
+	SetEndpointConfig(config *EndpointConfig)
 }

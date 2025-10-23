@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Go NATS microservice framework that provides an interface-based design for building NATS services. The project uses NATS.io for messaging and provides a clean abstraction layer for creating microservices with endpoints.
+This is a Go NATS microservice package that provides a clean, interface-based design for building NATS services. The package is designed to be imported by other projects and follows standard Go package conventions.
 
 ## Architecture
 
@@ -29,7 +29,8 @@ The codebase follows an interface-based design with these key components:
 
 1. **Interface-based design**: Services implement `Servicer`, endpoints implement `Endpointer`
 2. **Embedded endpoints**: Endpoints embed `nats_service.Endpoint` and implement `Handle(micro.Request)`
-4. **Structured logging**: Uses `log/slog` for logging throughout the codebase
+3. **Structured logging**: Uses `log/slog` for logging throughout the codebase
+4. **Package at root**: Main package files are at the root level for easy importing
 
 ## Development Commands
 
@@ -40,7 +41,7 @@ go build ./...
 
 ### Run Example Service
 ```bash
-go run ./example/basic-service/main.go
+go run ./cmd/basic-service
 ```
 
 ### Run Tests
@@ -65,11 +66,26 @@ go fmt ./...
 
 ## Project Structure
 
-- `example/basic-service/`: Complete example service implementation
-  - `basicservice/`: Custom service type embedding the base Service
-  - `endpoints/`: Example endpoints (Add, Say)
-- `pkg/counter/`: Shared counter utility package
-- `old/`: Backup/legacy test files
+```
+nats-service/
+├── service.go              # Main service implementation
+├── interfaces.go           # Public interfaces
+├── types.go               # Configuration types
+├── endpoint.go            # Base endpoint implementation
+├── pkg/                   # Supporting packages
+│   └── counter/           # Counter utility package
+├── examples/              # Usage examples
+│   └── basic/
+│       ├── service.go     # Example service implementation
+│       └── endpoints/
+│           ├── add.go
+│           └── say.go
+├── cmd/                   # Executable examples
+│   └── basic-service/
+│       └── main.go
+├── README.md              # Package documentation for consumers
+└── CLAUDE.md              # This file - development guide
+```
 
 ## Testing Standards
 
@@ -80,3 +96,10 @@ When writing Go tests, initialize assertions with `assert := assert.New(t)` at t
 - NATS.io for messaging and microservices
 - testify for testing assertions
 - goutils for utilities
+
+## Package Usage
+
+This is a library package meant to be imported by other projects:
+```go
+import "github.com/telemac/nats_service"
+```
