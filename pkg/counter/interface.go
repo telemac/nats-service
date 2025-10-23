@@ -1,6 +1,7 @@
 package counter
 
+// ICounter defines a thread-safe counter interface
 type ICounter interface {
-	Increment(amout int) int
-	Counter() int
+	Increment(amount int) int // Increment counter by amount and return new value
+	Counter() int             // Get current counter value
 }
