@@ -1,7 +1,6 @@
 package counter
 
 import (
-	"github.com/samber/do/v2"
 	"sync"
 )
 
@@ -21,8 +20,4 @@ func (c *Counter) Counter() int {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
 	return c.counter
-}
-
-func NewCounter(i do.Injector) *Counter {
-	return &Counter{}
 }
