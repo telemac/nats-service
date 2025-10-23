@@ -10,6 +10,7 @@ type Servicer interface {
 	Stop() error
 	GetServiceConfig() *ServiceConfig
 	AddEndpoint(config *EndpointConfig) error
+	AddEndpoints(configs ...*EndpointConfig) error
 	Logger() *slog.Logger
 }
 

@@ -106,6 +106,16 @@ func (svc *Service) AddEndpoint(config *EndpointConfig) error {
 	return svc.microSvc.AddEndpoint(config.Name, config.Endpoint, opts...)
 }
 
+func (svc *Service) AddEndpoints(configs ...*EndpointConfig) error {
+	for _, config := range configs {
+		err := svc.AddEndpoint(config)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (svc *Service) Logger() *slog.Logger {
 	return svc.config.Logger
 }

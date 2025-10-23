@@ -50,20 +50,18 @@ func main() {
 	}()
 
 	basicService.GetServiceConfig().Metadata["prefix"] = "a.b.c" // how to modify service metadatas
-
-	endpoints := []nats_service.Endpointer{
-		&endpoints.Add{},
-		&endpoints.Say{},
-	}
-
-	for _, endpoint := range endpoints {
-		err = basicService.AddEndpoint(&nats_service.EndpointConfig{
-			Endpoint: endpoint,
-		})
-		if err != nil {
-			slog.Error("Failed to add endpoint", "error", err, "endpoint", endpoint)
-			return
-		}
+	
+	err = basicService.AddEndpoints(
+		&nats_service.EndpointConfig{
+			Endpoint: &endpoints.Add{},
+		},
+		&nats_service.EndpointConfig{
+			Endpoint: &endpoints.Say{},
+		},
+	)
+	if err != nil {
+		slog.Error("Failed to add endpoint", "error", err, "endpoint", &endpoints.Add{})
+		return
 	}
 
 	<-ctx.Done()
