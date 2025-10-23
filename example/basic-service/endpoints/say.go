@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"github.com/nats-io/nats.go/micro"
 	"github.com/telemac/nats_service"
-	"gorm.io/gorm/logger"
-	"log/slog"
 	"os/exec"
 )
 
@@ -19,12 +17,12 @@ type SayRequest struct {
 }
 
 type SayResponse struct {
-	Output string `json:"output"`
-	Error  string `json:"error"`
+	Output string `json:"output,omitempty"`
+	Error  string `json:"error,omitempty"`
 }
 
 type Say struct {
-	nats_service.NatsEndpoint
+	nats_service.Endpoint
 }
 
 func (e *Say) Name() string {
@@ -39,15 +37,24 @@ func (e *Say) Metadata() map[string]string {
 
 func (e *Say) Handle(req micro.Request) {
 	log := e.Service().Logger()
+	log.Info("Handle request", "req", req)
 
 	var sayRequest SayRequest
 	err := json.Unmarshal(req.Data(), &sayRequest)
 	if err != nil {
+		log.Error("Unmarshal failed", "err", err)
 		req.Error("500", err.Error(), nil)
 		return
 	}
 	output, err := say(sayRequest.Phrase)
-	req.RespondJSON()
+	if err != nil {
+		log.Error("Say command failed", "err", err)
+		req.Error("500", err.Error(), nil)
+		return
+	}
+	req.RespondJSON(SayResponse{
+		Output: string(output),
+	})
 }
 
 func say(text string) ([]byte, error) {

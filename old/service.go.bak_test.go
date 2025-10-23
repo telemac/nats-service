@@ -1,4 +1,4 @@
-package nats_service
+package old
 
 import (
 	"testing"

@@ -7,25 +7,26 @@ import (
 	"sync"
 )
 
-var _ Servicer = (*NatsService)(nil)
+var _ Servicer = (*Service)(nil)
 
-type NatsService struct {
-	config   ServiceConfig
+type Service struct {
+	config   *ServiceConfig
 	mu       sync.RWMutex
 	microSvc micro.Service
 }
 
-func StartNatsService(config ServiceConfig) (*NatsService, error) {
-	svc := &NatsService{config: config}
-	err := svc.start()
-	return svc, err
-}
+//func StartService(config *ServiceConfig) (*Service, error) {
+//	var svc Service
+//	err := svc.Start(config)
+//	return &svc, err
+//}
 
-func (svc *NatsService) start() error {
-	err := svc.config.Validate()
+func (svc *Service) Start(config *ServiceConfig) error {
+	err := config.Validate()
 	if err != nil {
 		return fmt.Errorf("invalid service config: %w", err)
 	}
+	svc.config = config
 	// build micro.AddService configuration
 	microConfig := micro.Config{
 		Name:        svc.config.Name,
@@ -43,15 +44,15 @@ func (svc *NatsService) start() error {
 	return err
 }
 
-func (svc *NatsService) Stop() error {
+func (svc *Service) Stop() error {
 	return svc.microSvc.Stop()
 }
 
-func (svc *NatsService) GetServiceConfig() ServiceConfig {
-	return svc.config
+func (svc *Service) GetServiceConfig() ServiceConfig {
+	return *svc.config
 }
 
-func (svc *NatsService) AddEndpoint(config EndpointConfig) error {
+func (svc *Service) AddEndpoint(config EndpointConfig) error {
 	if config.Name == "" {
 		config.Name = config.Endpoint.Name()
 	}
@@ -102,6 +103,6 @@ func (svc *NatsService) AddEndpoint(config EndpointConfig) error {
 	return svc.microSvc.AddEndpoint(config.Name, config.Endpoint, opts...)
 }
 
-func (svc *NatsService) Logger() *slog.Logger {
+func (svc *Service) Logger() *slog.Logger {
 	return svc.config.Logger
 }

@@ -1,4 +1,4 @@
-package nats_service
+package old
 
 import (
 	"testing"
@@ -20,15 +20,15 @@ func NewTestNATSServer(t *testing.T) *TestNATSServer {
 
 	// Create a new NATS server with minimal configuration based on NATS test patterns
 	opts := &server.Options{
-		Host:                     "127.0.0.1",
-		Port:                     -1, // Use random available port (NATS uses -1 not 0)
-		NoLog:                    true,
-		NoSigs:                   true,
-		Debug:                    false,
-		Trace:                    false,
-		JetStream:                false,
-		DisableShortFirstPing:    true,
-		MaxControlLine:           4096,
+		Host:                  "127.0.0.1",
+		Port:                  -1, // Use random available port (NATS uses -1 not 0)
+		NoLog:                 true,
+		NoSigs:                true,
+		Debug:                 false,
+		Trace:                 false,
+		JetStream:             false,
+		DisableShortFirstPing: true,
+		MaxControlLine:        4096,
 	}
 
 	// Use NewServer instead of deprecated New

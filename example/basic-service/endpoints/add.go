@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"github.com/nats-io/nats.go/micro"
 	"github.com/telemac/nats_service"
+	"github.com/telemac/nats_service/example/basic-service/basicservice"
+	"github.com/telemac/nats_service/pkg/counter"
 )
 
 /*
@@ -21,8 +23,8 @@ type AddResponse struct {
 }
 
 type Add struct {
-	nats_service.NatsEndpoint
-	Count int
+	nats_service.Endpoint
+	counter counter.Counter
 }
 
 func (e *Add) Name() string {
@@ -37,8 +39,12 @@ func (e *Add) Metadata() map[string]string {
 
 func (e *Add) Handle(req micro.Request) {
 	log := e.Service().Logger()
+	basicService, ok := e.Service().(*basicservice.BasicService)
+	if ok {
+		basicService.Counter.Increment(1)
+	}
 
-	e.Count++
+	e.counter.Increment(1)
 
 	var addReq AddRequest
 	err := json.Unmarshal(req.Data(), &addReq)
@@ -46,7 +52,7 @@ func (e *Add) Handle(req micro.Request) {
 		req.Error("500", err.Error(), nil)
 		return
 	}
-	log.Info("add handler called", "count", e.Count)
+	log.Info("add handler called", "count", e.counter.Counter())
 	req.RespondJSON(AddResponse{
 		Result: addReq.A + addReq.B,
 	})

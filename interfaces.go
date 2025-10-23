@@ -6,6 +6,7 @@ import (
 )
 
 type Servicer interface {
+	Start(*ServiceConfig) error
 	Stop() error
 	GetServiceConfig() ServiceConfig
 	AddEndpoint(config EndpointConfig) error

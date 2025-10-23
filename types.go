@@ -8,7 +8,7 @@ import (
 )
 
 type ServiceConfig struct {
-	Ctx         context.Context // TOCO : handle or remove
+	Ctx         context.Context // TODO : handle or remove
 	Nc          *nats.Conn
 	Logger      *slog.Logger
 	Name        string `json:"name"`
