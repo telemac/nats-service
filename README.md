@@ -23,12 +23,17 @@ go get github.com/telemac/nats_service
 package main
 
 import (
+    "context"
     "github.com/nats-io/nats.go"
     "github.com/telemac/nats_service"
     "log/slog"
 )
 
 func main() {
+    // Create cancellable context
+    ctx, cancel := context.WithCancel(context.Background())
+    defer cancel()
+
     // Connect to NATS
     nc, err := nats.Connect(nats.DefaultURL)
     if err != nil {
@@ -39,6 +44,7 @@ func main() {
     // Create service
     var svc nats_service.Service
     err = svc.Start(&nats_service.ServiceConfig{
+        Ctx:         ctx,
         Nc:          nc,
         Logger:      slog.Default(),
         Name:        "my-service",
@@ -51,7 +57,7 @@ func main() {
     defer svc.Stop()
 
     // Add endpoints
-    err = svc.AddEndpoint(nats_service.EndpointConfig{
+    err = svc.AddEndpoint(&nats_service.EndpointConfig{
         Endpoint: &MyEndpoint{},
     })
     if err != nil {
@@ -73,8 +79,9 @@ The main component that manages NATS microservice configuration and lifecycle.
 type Servicer interface {
     Start(*ServiceConfig) error
     Stop() error
-    GetServiceConfig() ServiceConfig
-    AddEndpoint(config EndpointConfig) error
+    GetServiceConfig() *ServiceConfig
+    AddEndpoint(config *EndpointConfig) error
+    AddEndpoints(configs ...*EndpointConfig) error
     Logger() *slog.Logger
 }
 ```
@@ -122,7 +129,11 @@ type EndpointConfig struct {
     QueueGroup string
     Subject    string
 }
+
 ```
+
+Note: When registering endpoints, the service merges metadata from both the EndpointConfig.Metadata field
+and the endpoint's Metadata() method. If both are present, config metadata takes precedence.
 
 ## Examples
 
