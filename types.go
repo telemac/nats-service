@@ -1,4 +1,4 @@
-package nats_service
+package natsservice
 
 import (
 	"context"
@@ -9,14 +9,14 @@ import (
 
 // ServiceConfig holds configuration for NATS services
 type ServiceConfig struct {
-	Ctx         context.Context      // Service context for cancellation
-	Nc          *nats.Conn          // NATS connection
-	Logger      *slog.Logger        // Service logger
-	Name        string               `json:"name"`        // Service name
-	Prefix      string               // Subject prefix for endpoints
-	Version     string               `json:"version"`     // Service version
-	Description string               `json:"description"` // Service description
-	Metadata    map[string]string    `json:"metadata,omitempty"` // Additional metadata
+	Ctx         context.Context   // Service context for cancellation
+	Nc          *nats.Conn        // NATS connection
+	Logger      *slog.Logger      // Service logger
+	Name        string            `json:"name"` // Service name
+	Prefix      string            // Subject prefix for endpoints
+	Version     string            `json:"version"`            // Service version
+	Description string            `json:"description"`        // Service description
+	Metadata    map[string]string `json:"metadata,omitempty"` // Additional metadata
 }
 
 // Validate checks that all required fields are present
@@ -38,12 +38,12 @@ func (sc *ServiceConfig) Validate() error {
 
 // EndpointConfig holds configuration for individual endpoints
 type EndpointConfig struct {
-	Service    Servicer            // Associated service
-	Name       string              `json:"name"`          // Endpoint name
-	Endpoint   Endpointer          `json:"-"`             // Non-serializable endpoint implementation
-	Metadata   map[string]string   `json:"metadata,omitempty"` // Endpoint metadata
-	QueueGroup string              `json:"queue_group,omitempty"` // Queue group name
-	Subject    string              `json:"subject,omitempty"` // Custom subject
+	Service    Servicer          // Associated service
+	Name       string            `json:"name"`                  // Endpoint name
+	Endpoint   Endpointer        `json:"-"`                     // Non-serializable endpoint implementation
+	Metadata   map[string]string `json:"metadata,omitempty"`    // Endpoint metadata
+	QueueGroup string            `json:"queue_group,omitempty"` // Queue group name
+	Subject    string            `json:"subject,omitempty"`     // Custom subject
 }
 
 // Validate checks that all required fields are present

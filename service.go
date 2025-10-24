@@ -1,4 +1,4 @@
-package nats_service
+package natsservice
 
 import (
 	"fmt"
@@ -12,9 +12,9 @@ var _ Servicer = (*Service)(nil)
 
 // Service is the default implementation of the Servicer interface
 type Service struct {
-	config   *ServiceConfig  // Service configuration
-	mu       sync.RWMutex    // Mutex for thread safety
-	microSvc micro.Service   // NATS micro service instance
+	config   *ServiceConfig // Service configuration
+	mu       sync.RWMutex   // Mutex for thread safety
+	microSvc micro.Service  // NATS micro service instance
 }
 
 // Start initializes and starts the NATS microservice

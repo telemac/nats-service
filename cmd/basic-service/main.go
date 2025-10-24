@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/nats-io/nats.go"
 	"github.com/telemac/goutils/task"
-	"github.com/telemac/nats-service"
-	"github.com/telemac/nats-service/examples/basic"
-	"github.com/telemac/nats-service/examples/basic/endpoints"
+	"github.com/telemac/natsservice"
+	"github.com/telemac/natsservice/examples/basic"
+	"github.com/telemac/natsservice/examples/basic/endpoints"
 	"log/slog"
 	"time"
 )
@@ -29,7 +29,7 @@ func main() {
 	// Create and start service
 	log.Info("starting nats service")
 	var basicService basic.BasicService
-	err = basicService.Start(&nats_service.ServiceConfig{
+	err = basicService.Start(&natsservice.ServiceConfig{
 		Ctx:         ctx,
 		Nc:          nc,
 		Logger:      log,
@@ -59,10 +59,10 @@ func main() {
 
 	// Register endpoints
 	err = basicService.AddEndpoints(
-		&nats_service.EndpointConfig{
+		&natsservice.EndpointConfig{
 			Endpoint: &endpoints.Add{},
 		},
-		&nats_service.EndpointConfig{
+		&natsservice.EndpointConfig{
 			Endpoint: &endpoints.Say{},
 		},
 	)

@@ -28,7 +28,7 @@ The codebase follows an interface-based design with these key components:
 ## Key Patterns
 
 1. **Interface-based design**: Services implement `Servicer`, endpoints implement `Endpointer`
-2. **Embedded endpoints**: Endpoints embed `nats_service.Endpoint` and implement `Handle(micro.Request)`
+2. **Embedded endpoints**: Endpoints embed `natsservice.Endpoint` and implement `Handle(micro.Request)`
 3. **Structured logging**: Uses `log/slog` for logging throughout the codebase
 4. **Package at root**: Main package files are at the root level for easy importing
 
@@ -101,5 +101,5 @@ When writing Go tests, initialize assertions with `assert := assert.New(t)` at t
 
 This is a library package meant to be imported by other projects:
 ```go
-import "github.com/telemac/nats-service"
+import "github.com/telemac/natsservice"
 ```

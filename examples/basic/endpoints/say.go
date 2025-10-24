@@ -2,8 +2,10 @@ package endpoints
 
 import (
 	"encoding/json"
+
 	"github.com/nats-io/nats.go/micro"
-	"github.com/telemac/nats-service"
+	natsservice "github.com/telemac/natsservice"
+
 	"os/exec"
 )
 
@@ -26,7 +28,7 @@ type SayResponse struct {
 
 // Say endpoint that uses macOS text-to-speech
 type Say struct {
-	nats_service.Endpoint
+	natsservice.Endpoint
 }
 
 // Name returns the endpoint name

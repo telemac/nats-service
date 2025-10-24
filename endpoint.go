@@ -1,4 +1,4 @@
-package nats_service
+package natsservice
 
 import "github.com/nats-io/nats.go/micro"
 

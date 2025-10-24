@@ -14,7 +14,7 @@ A Go package that provides a clean, interface-based abstraction layer over NATS 
 ## Installation
 
 ```bash
-go get github.com/telemac/nats-service
+go get github.com/telemac/natsservice
 ```
 
 ## Quick Start
@@ -25,7 +25,7 @@ package main
 import (
     "context"
     "github.com/nats-io/nats.go"
-    "github.com/telemac/nats-service"
+    "github.com/telemac/natsservice"
     "log/slog"
 )
 
@@ -42,8 +42,8 @@ func main() {
     defer nc.Close()
 
     // Create service
-    var svc nats_service.Service
-    err = svc.Start(&nats_service.ServiceConfig{
+    var svc natsservice.Service
+    err = svc.Start(&natsservice.ServiceConfig{
         Ctx:         ctx,
         Nc:          nc,
         Logger:      slog.Default(),
@@ -57,7 +57,7 @@ func main() {
     defer svc.Stop()
 
     // Add endpoints
-    err = svc.AddEndpoint(&nats_service.EndpointConfig{
+    err = svc.AddEndpoint(&natsservice.EndpointConfig{
         Endpoint: &MyEndpoint{},
     })
     if err != nil {
@@ -92,7 +92,7 @@ Endpoints handle incoming NATS requests. Embed the base `Endpoint` type and impl
 
 ```go
 type MyEndpoint struct {
-    nats_service.Endpoint
+    natsservice.Endpoint
 }
 
 func (e *MyEndpoint) Name() string {

@@ -3,9 +3,9 @@ package endpoints
 import (
 	"encoding/json"
 	"github.com/nats-io/nats.go/micro"
-	"github.com/telemac/nats-service"
-	"github.com/telemac/nats-service/examples/basic"
-	"github.com/telemac/nats-service/pkg/counter"
+	"github.com/telemac/natsservice"
+	"github.com/telemac/natsservice/examples/basic"
+	"github.com/telemac/natsservice/pkg/counter"
 )
 
 /*
@@ -27,7 +27,7 @@ type AddResponse struct {
 
 // Add endpoint that sums two integers
 type Add struct {
-	nats_service.Endpoint
+	natsservice.Endpoint
 	counter counter.Counter
 }
 

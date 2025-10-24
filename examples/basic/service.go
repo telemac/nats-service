@@ -1,15 +1,15 @@
 package basic
 
 import (
-	"github.com/telemac/nats-service"
-	"github.com/telemac/nats-service/pkg/counter"
+	"github.com/telemac/natsservice"
+	"github.com/telemac/natsservice/pkg/counter"
 )
 
 // Ensure BasicService implements Servicer interface
-var _ nats_service.Servicer = (*BasicService)(nil)
+var _ natsservice.Servicer = (*BasicService)(nil)
 
-// BasicService extends nats_service.Service with a counter
+// BasicService extends natsservice.Service with a counter
 type BasicService struct {
-	nats_service.Service
+	natsservice.Service
 	Counter counter.Counter // Service-level counter for tracking requests
 }
