@@ -14,7 +14,7 @@ A Go package that provides a clean, interface-based abstraction layer over NATS 
 ## Installation
 
 ```bash
-go get github.com/telemac/nats_service
+go get github.com/telemac/nats-service
 ```
 
 ## Quick Start
@@ -25,7 +25,7 @@ package main
 import (
     "context"
     "github.com/nats-io/nats.go"
-    "github.com/telemac/nats_service"
+    "github.com/telemac/nats-service"
     "log/slog"
 )
 

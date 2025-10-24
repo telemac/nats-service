@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/nats-io/nats.go"
 	"github.com/telemac/goutils/task"
-	"github.com/telemac/nats_service"
-	"github.com/telemac/nats_service/examples/basic"
-	"github.com/telemac/nats_service/examples/basic/endpoints"
+	"github.com/telemac/nats-service"
+	"github.com/telemac/nats-service/examples/basic"
+	"github.com/telemac/nats-service/examples/basic/endpoints"
 	"log/slog"
 	"time"
 )

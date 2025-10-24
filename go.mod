@@ -1,4 +1,4 @@
-module github.com/telemac/nats_service
+module github.com/telemac/nats-service
 
 go 1.24.4
 

@@ -101,5 +101,5 @@ When writing Go tests, initialize assertions with `assert := assert.New(t)` at t
 
 This is a library package meant to be imported by other projects:
 ```go
-import "github.com/telemac/nats_service"
+import "github.com/telemac/nats-service"
 ```

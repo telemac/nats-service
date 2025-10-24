@@ -3,9 +3,9 @@ package endpoints
 import (
 	"encoding/json"
 	"github.com/nats-io/nats.go/micro"
-	"github.com/telemac/nats_service"
-	"github.com/telemac/nats_service/examples/basic"
-	"github.com/telemac/nats_service/pkg/counter"
+	"github.com/telemac/nats-service"
+	"github.com/telemac/nats-service/examples/basic"
+	"github.com/telemac/nats-service/pkg/counter"
 )
 
 /*

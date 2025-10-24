@@ -3,7 +3,7 @@ package endpoints
 import (
 	"encoding/json"
 	"github.com/nats-io/nats.go/micro"
-	"github.com/telemac/nats_service"
+	"github.com/telemac/nats-service"
 	"os/exec"
 )
 

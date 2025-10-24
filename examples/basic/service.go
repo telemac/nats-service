@@ -1,8 +1,8 @@
 package basic
 
 import (
-	"github.com/telemac/nats_service"
-	"github.com/telemac/nats_service/pkg/counter"
+	"github.com/telemac/nats-service"
+	"github.com/telemac/nats-service/pkg/counter"
 )
 
 // Ensure BasicService implements Servicer interface
